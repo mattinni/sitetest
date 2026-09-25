@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#262626;-webkit-font-smoothing:antialiased}
+a{color:#e6e4df;text-decoration:none}a:hover{color:#b3a37e}
+button{font:inherit}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#262626;color:#e6e4df;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;display:flex;flex-direction:column">
+  <header style="display:flex;align-items:center;gap:48px;padding:40px 5vw 32px;flex-wrap:wrap">
+    <div onClick="{{ goHome }}" style="cursor:pointer;display:flex;align-items:center;gap:14px">
+      <svg width="52" height="52" viewBox="0 0 100 100" fill="none" stroke="#8c7d5c" stroke-width="3.5">
+        <rect x="2" y="2" width="96" height="96"></rect><line x1="2" y1="50" x2="98" y2="50"></line>
+        <line x1="26" y1="2" x2="26" y2="50"></line><line x1="46" y1="2" x2="46" y2="50"></line><line x1="46" y1="2" x2="98" y2="50"></line>
+        <line x1="2" y1="50" x2="54" y2="98"></line><line x1="54" y1="50" x2="54" y2="98"></line><line x1="76" y1="50" x2="76" y2="98"></line>
+      </svg>
+    </div>
+    <nav style="display:flex;gap:28px;flex-wrap:wrap">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="3">
+        <button onClick="{{ n.go }}" style="background:none;border:none;border-bottom:1px solid {{ n.bd }};padding:0 0 4px;color:#e6e4df;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">{{ n.label }}</button>
+      </sc-for>
+    </nav>
+    <a href="https://innimusic.com" style="margin-left:auto;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#a8a49b">innimusic.com ↗</a>
+  </header>
+
+  <main style="flex:1;width:100%;max-width:1280px;margin:0 auto;padding:24px 5vw 96px;box-sizing:border-box">
+
+    <sc-if value="{{ loadError }}">
+      <div style="border:1px solid #8c5c5c;padding:20px;font:13px ui-monospace,Menlo,monospace;color:#e6c4c4;margin-bottom:32px">{{ loadError }}</div>
+    </sc-if>
+
+    <sc-if value="{{ isCollection }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(230,228,223,.14);padding-bottom:24px">
+          <h1 style="margin:0;font-size:44px;font-weight:500;letter-spacing:.06em;text-transform:uppercase">{{ col.title }}</h1>
+          <span style="font-size:13px;color:#a8a49b;letter-spacing:.06em">{{ col.count }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ col.filterRows }}" as="row" hint-placeholder-count="1">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="width:72px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a8a49b">{{ row.label }}</span>
+              <sc-for list="{{ row.chips }}" as="c" hint-placeholder-count="4">
+                <button onClick="{{ c.pick }}" style="background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }};padding:7px 14px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </sc-for>
+          <sc-if value="{{ hasSearch }}">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="width:72px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a8a49b">Artist</span>
+              <input type="search" value="{{ q }}" onChange="{{ onSearch }}" placeholder="Search artists" style="flex:0 1 320px;background:transparent;border:1px solid rgba(230,228,223,.28);color:#e6e4df;padding:8px 14px;font:500 13px 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.04em;outline:none" style-focus="border-color:#8c7d5c"></input>
+            </div>
+          </sc-if>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax({{ cardMin }},1fr));gap:40px 28px">
+          <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="3">
+            <div onClick="{{ it.open }}" style="cursor:pointer;display:flex;flex-direction:column;gap:14px">
+              <div style="aspect-ratio:1/1;width:100%;overflow:hidden;background:#1e1e1e" style-hover="opacity:.85">
+                <sc-if value="{{ it.hasImg }}"><img src="{{ it.img }}" alt="{{ it.title }}" style="width:100%;height:100%;object-fit:cover;display:block"></img></sc-if>
+                <sc-if value="{{ it.noImg }}"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#2e2e2e 0 10px,#292929 10px 20px);font:11px ui-monospace,Menlo,monospace;color:#8f8b83;letter-spacing:.04em;text-align:center;padding:12px;box-sizing:border-box">{{ it.phLabel }}</div></sc-if>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline">
+                  <span style="font-size:15px;letter-spacing:.02em;text-wrap:pretty">{{ it.title }}</span>
+                  <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#b3a37e;white-space:nowrap">{{ it.tag }}</span>
+                </div>
+                <span style="font-size:12px;color:#a8a49b;letter-spacing:.04em;text-transform:uppercase">{{ it.sub }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ col.empty }}"><p style="color:#a8a49b;font-size:14px">Nothing matches these filters.</p></sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isDetail }}">
+      <div style="display:flex;flex-direction:column;gap:40px">
+        <div style="display:flex;gap:10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a8a49b">
+          <button onClick="{{ d.back }}" style="background:none;border:none;padding:0;color:#a8a49b;cursor:pointer;font-size:11px;letter-spacing:.1em;text-transform:uppercase">{{ d.section }}</button><span>/</span><span style="color:#e6e4df">{{ d.title }}</span>
+        </div>
+        <sc-if value="{{ d.isArtist }}"><h1 style="margin:0;text-align:center;font-size:56px;font-weight:500;letter-spacing:.06em;text-transform:uppercase">{{ d.title }}</h1></sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:56px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="aspect-ratio:1/1;width:100%;overflow:hidden;background:#1e1e1e">
+              <sc-if value="{{ d.hasImg }}"><img src="{{ d.img }}" alt="{{ d.title }}" style="width:100%;height:100%;object-fit:cover;display:block"></img></sc-if>
+              <sc-if value="{{ d.noImg }}"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#2e2e2e 0 10px,#292929 10px 20px);font:12px ui-monospace,Menlo,monospace;color:#8f8b83">{{ d.phLabel }}</div></sc-if>
+            </div>
+            <sc-if value="{{ d.credit }}"><span style="font-size:11px;font-style:italic;color:#a8a49b">{{ d.credit }}</span></sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:24px">
+            <span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#b3a37e">{{ d.kicker }}</span>
+            <sc-if value="{{ d.notArtist }}"><h1 style="margin:-12px 0 0;font-size:44px;font-weight:500;letter-spacing:.03em;line-height:1.08;text-wrap:pretty">{{ d.title }}</h1></sc-if>
+            <sc-if value="{{ d.hasLinks }}">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ d.links }}" as="l">
+                  <div style="font-size:15px;color:#a8a49b;display:flex;gap:6px;flex-wrap:wrap"><span>{{ l.pre }}</span><button onClick="{{ l.go }}" style="background:none;border:none;border-bottom:1px solid #8c7d5c;padding:0 0 1px;color:#e6e4df;cursor:pointer;font-size:15px">{{ l.label }} →</button></div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-for list="{{ d.bio }}" as="p"><p style="margin:0;font-size:16px;line-height:1.65;font-weight:400;color:#d4d1ca;text-wrap:pretty;max-width:60ch">{{ p }}</p></sc-for>
+            <sc-if value="{{ d.hasMeta }}">
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:10px 28px;border-top:1px solid rgba(230,228,223,.14);padding-top:20px;font-size:13px">
+                <sc-for list="{{ d.meta }}" as="m"><span style="color:#a8a49b;letter-spacing:.08em;text-transform:uppercase;font-size:11px;padding-top:2px">{{ m.k }}</span><span>{{ m.v }}</span></sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ d.hasBuy }}">
+              <sc-if value="{{ d.hasShopify }}">
+                <div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid rgba(230,228,223,.14);padding-top:20px">
+                  <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a8a49b">{{ d.buyHeading }}</span>
+                  <div ref="{{ shopRef }}" style="min-height:52px"></div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ d.noShopify }}">
+              <div style="display:flex;flex-direction:column;gap:16px;border:1px dashed rgba(179,163,126,.6);padding:22px">
+                <span style="font:11px ui-monospace,Menlo,monospace;color:#b3a37e;letter-spacing:.04em">{{ d.shopifyLabel }}</span>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <sc-for list="{{ d.variants }}" as="v"><button onClick="{{ v.pick }}" style="background:{{ v.bg }};color:{{ v.fg }};border:1px solid {{ v.bd }};padding:8px 14px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer">{{ v.label }}</button></sc-for>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+                  <span style="font-size:22px;letter-spacing:.02em">{{ d.price }}</span>
+                  <button onClick="{{ addToCart }}" style="background:#7a6c4f;color:#f4f2ed;border:none;padding:14px 28px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer" style-hover="background:#8c7d5c">{{ cartLabel }}</button>
+                </div>
+              </div>
+              </sc-if>
+            </sc-if>
+            <sc-if value="{{ d.hasPhysical }}">
+              <div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid rgba(230,228,223,.14);padding-top:20px">
+                <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a8a49b">Also available on</span>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                  <sc-for list="{{ d.physical }}" as="p">
+                    <button onClick="{{ p.go }}" style="display:flex;align-items:center;gap:12px;background:transparent;border:1px solid rgba(230,228,223,.4);color:#e6e4df;padding:14px 20px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer" style-hover="border-color:#b3a37e;color:#b3a37e"><span>{{ p.label }}</span><span style="color:#a8a49b">{{ p.price }}</span><span>→</span></button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <sc-if value="{{ d.hasListen }}">
+          <div style="background:#303030;margin:24px -5vw 0;padding:56px 5vw;display:flex;flex-direction:column;align-items:center;gap:24px">
+            <h2 style="margin:0;font-size:24px;font-weight:500;letter-spacing:.1em;text-transform:uppercase">Listen</h2>
+            <sc-if value="{{ d.listen }}"><iframe src="{{ d.listen }}" title="Player" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="width:100%;max-width:720px;height:352px;border:0;border-radius:12px"></iframe></sc-if>
+            <sc-if value="{{ d.noListen }}"><div style="width:100%;max-width:640px;height:120px;border:1px dashed rgba(230,228,223,.3);display:flex;align-items:center;justify-content:center;font:11px ui-monospace,Menlo,monospace;color:#a8a49b;background:repeating-linear-gradient(135deg,#333 0 10px,#2e2e2e 10px 20px)">PLAYER EMBED · SET "listenEmbed" IN CONTENT FILE</div></sc-if>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ d.related }}" as="sec">
+          <div style="display:flex;flex-direction:column;gap:24px;padding-top:32px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(230,228,223,.14);padding-bottom:16px">
+              <h2 style="margin:0;font-size:24px;font-weight:500;letter-spacing:.1em;text-transform:uppercase">{{ sec.title }}</h2>
+              <button onClick="{{ sec.all }}" style="background:none;border:none;padding:0;color:#a8a49b;cursor:pointer;font-size:11px;letter-spacing:.1em;text-transform:uppercase">{{ sec.allLabel }}</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax({{ cardMin }},1fr));gap:40px 28px">
+              <sc-for list="{{ sec.items }}" as="it">
+                <div onClick="{{ it.open }}" style="cursor:pointer;display:flex;flex-direction:column;gap:14px">
+                  <div style="aspect-ratio:1/1;width:100%;overflow:hidden;background:#1e1e1e" style-hover="opacity:.85">
+                    <sc-if value="{{ it.hasImg }}"><img src="{{ it.img }}" alt="{{ it.title }}" style="width:100%;height:100%;object-fit:cover;display:block"></img></sc-if>
+                    <sc-if value="{{ it.noImg }}"><div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#2e2e2e 0 10px,#292929 10px 20px);font:11px ui-monospace,Menlo,monospace;color:#8f8b83;text-align:center;padding:12px;box-sizing:border-box">{{ it.phLabel }}</div></sc-if>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:5px">
+                    <div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline">
+                      <span style="font-size:15px;letter-spacing:.02em;text-wrap:pretty">{{ it.title }}</span>
+                      <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#b3a37e;white-space:nowrap">{{ it.tag }}</span>
+                    </div>
+                    <span style="font-size:12px;color:#a8a49b;letter-spacing:.04em;text-transform:uppercase">{{ it.sub }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </main>
+
+  <footer style="display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:32px 5vw;border-top:1px solid rgba(230,228,223,.1);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#a8a49b">
+    <span>INNI · Los Angeles / Reykjavík</span>
+    <span>Label · Publishing · Management</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showDrafts&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;comfortable&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+// Content lives in content/*.json — see "HOW TO ADD CONTENT.md". No need to edit this file.
+const FILES = { artists: 'content/artists.json', releases: 'content/releases.json', merch: 'content/merch.json', shop: 'content/shop.json', categories: 'content/categories.json' };
+const SHOPIFY_SDK = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+const BTN = { color: '#292929', ':hover': { color: '#292929', 'background-color': '#e6e6e6' }, 'background-color': '#ffffff', ':focus': { 'background-color': '#e6e6e6' } };
+const FULL = { '@media (min-width: 601px)': { 'max-width': '100%', 'margin-left': '0px', 'margin-bottom': '0px' } };
+const shopOptions = (text) => ({
+  product: { styles: { product: FULL, button: BTN }, contents: { img: false, title: false }, text: { button: text } },
+  modalProduct: { contents: { img: false, imgWithCarousel: true, button: false, buttonWithQuantity: true }, styles: { product: FULL, button: BTN }, text: { button: text } },
+  option: {},
+  cart: { styles: { button: BTN }, text: { total: 'Subtotal', button: 'Checkout' } },
+  toggle: { styles: { toggle: { 'background-color': '#ffffff', ':hover': { 'background-color': '#e6e6e6' }, ':focus': { 'background-color': '#e6e6e6' } }, count: { color: '#292929', ':hover': { color: '#292929' } }, iconPath: { fill: '#292929' } } },
+});
+const IMG_DIR = { artists: 'images/artists/', releases: 'images/releases/', merch: 'images/merch/' };
+const SECTION = { releases: 'Releases', merch: 'Merch', artists: 'Artists' };
+const slug = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const key = (s) => String(s || '').trim().toLowerCase();
+const paras = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+
+class Component extends DCLogic {
+  state = { route: this.parse(), type: 'All', q: '', variant: 0, added: false, data: null, loadError: '' };
+  parse() {
+    const [, view, id] = (window.location.hash || '').split('/');
+    return { view: ['releases', 'merch', 'artists', 'artist', 'release', 'item'].includes(view) ? view : 'releases', id: decodeURIComponent(id || '') };
+  }
+  async componentDidMount() {
+    this.onHash = () => { this.setState({ route: this.parse(), type: 'All', q: '', variant: 0, added: false }); window.scrollTo(0, 0); };
+    window.addEventListener('hashchange', this.onHash);
+    const data = {}, errs = [];
+    await Promise.all(Object.entries(FILES).map(async ([k, f]) => {
+      try { const r = await fetch(f, { cache: 'no-store' }); data[k] = await r.json(); }
+      catch (e) { data[k] = []; errs.push(f + ' could not be read — check it for a missing comma or quote.'); }
+    }));
+    this.setState({ data, loadError: errs.join(' ') });
+  }
+  shopRef = (el) => { this.shopNode = el; this.mountShop(); };
+  componentDidUpdate() { this.mountShop(); }
+  loadShopUI() {
+    const shop = (this.state.data || {}).shop || {};
+    if (!this.shopUI) this.shopUI = new Promise((res, rej) => {
+      const init = () => res(window.ShopifyBuy.UI.onReady(window.ShopifyBuy.buildClient({ domain: shop.domain, storefrontAccessToken: shop.storefrontAccessToken })));
+      if (window.ShopifyBuy && window.ShopifyBuy.UI) return init();
+      const s = document.createElement('script'); s.async = true; s.src = SHOPIFY_SDK; s.onload = init; s.onerror = rej; document.head.appendChild(s);
+    });
+    return this.shopUI;
+  }
+  mountShop() {
+    const node = this.shopNode, pid = this.currentShopId;
+    const shop = (this.state.data || {}).shop;
+    if (!node || !pid || !shop || !shop.domain || node.dataset.pid === pid) return;
+    node.innerHTML = ''; node.dataset.pid = pid;
+    this.loadShopUI().then((ui) => {
+      if (this.shopNode !== node || node.dataset.pid !== pid) return;
+      ui.createComponent('product', { id: pid, node, moneyFormat: encodeURIComponent(shop.moneyFormat || '€{{amount_with_comma_separator}}'), options: shopOptions(shop.buttonText || 'Add to cart') });
+    }).catch(() => { node.textContent = 'Shop unavailable — check content/shop.json.'; });
+  }
+  componentWillUnmount() { window.removeEventListener('hashchange', this.onHash); }
+  go(view, id) { window.location.hash = '/' + view + (id ? '/' + encodeURIComponent(id) : ''); }
+
+  build() {
+    const src = this.state.data || { artists: [], releases: [], merch: [] };
+    const showDrafts = this.props.showDrafts ?? true;
+    const pub = (l) => (l || []).filter((x) => showDrafts || x.published !== false);
+    const byName = (a, b) => (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' });
+    const A = pub(src.artists).map((a) => ({ ...a, kind: 'artists', id: slug(a.tag || a.name), key: key(a.tag || a.name), name: a.name || a.tag, img: a.photo })).sort(byName);
+    const aByKey = Object.fromEntries(A.map((a) => [a.key, a]));
+    const R = pub(src.releases).map((r) => {
+      const tags = (r.tags || []).map(key);
+      return { ...r, kind: 'releases', id: slug(r.tag || r.title), key: key(r.tag || r.title), name: r.title, img: r.artwork, artists: tags.map((t) => aByKey[t]).filter(Boolean) };
+    }).sort(byName);
+    const rByKey = Object.fromEntries(R.map((r) => [r.key, r]));
+    const M = pub(src.merch).map((m) => {
+      const tags = (m.tags || []).map(key);
+      const releases = tags.map((t) => rByKey[t]).filter(Boolean);
+      const artists = [...new Set([...tags.map((t) => aByKey[t]).filter(Boolean), ...releases.flatMap((r) => r.artists)])];
+      return { ...m, kind: 'merch', id: slug(m.title), name: m.title, img: m.image, releases, artists };
+    }).sort(byName);
+    return { A, R, M };
+  }
+
+  renderVals() {
+    this.currentShopId = '';
+    const { A, R, M } = this.build();
+    const loaded = !!this.state.data;
+    const { route, type, variant, added } = this.state;
+    const cardMin = (this.props.density ?? 'comfortable') === 'compact' ? '180px' : '260px';
+    const img = (x, label) => ({ img: x.img ? IMG_DIR[x.kind] + x.img : '', hasImg: !!x.img, noImg: !x.img, phLabel: label });
+    const names = (l) => l.map((a) => a.name).join(' & ') || 'INNI';
+
+    const rCard = (r) => ({ key: r.id, title: r.name, sub: [names(r.artists), r.year].filter(Boolean).join(' · '), tag: r.type || '', ...img(r, 'RELEASE ARTWORK 1:1'), open: () => this.go('release', r.id) });
+    const mCard = (m) => ({ key: m.id, title: m.name, sub: names(m.artists), tag: m.category || '', ...img(m, 'MERCH SHOT 1:1'), open: () => this.go('item', m.id) });
+    const aCard = (a) => ({ key: a.id, title: a.name, sub: '', tag: a.country || '', ...img(a, 'ARTIST PHOTO 1:1'), open: () => this.go('artist', a.id) });
+
+    const chip = (label, active, pick) => ({ label, pick, bg: active ? '#e6e4df' : 'transparent', fg: active ? '#262626' : '#e6e4df', bd: active ? '#e6e4df' : 'rgba(230,228,223,.28)' });
+    const row = (label, opts) => ({ label, chips: ['All', ...opts].map((o) => chip(o, type === o, () => this.setState({ type: o }))) });
+    const uniq = (l) => [...new Set(l.filter(Boolean))].sort();
+    const q = this.state.q.trim().toLowerCase();
+    const matchA = (x) => !q || names(x.artists).toLowerCase().includes(q);
+
+    const collectionView = ['releases', 'merch', 'artists'].includes(route.view);
+    const nav = ['releases', 'merch', 'artists'].map((v) => {
+      const on = v === route.view || (v === 'releases' && route.view === 'release') || (v === 'merch' && route.view === 'item') || (v === 'artists' && route.view === 'artist');
+      return { label: SECTION[v], go: () => this.go(v), bd: on ? '#8c7d5c' : 'transparent' };
+    });
+
+    let col = { title: SECTION[route.view] || '', count: '', filterRows: [], items: [], empty: false };
+    if (collectionView) {
+      let items = [], rows = [];
+      if (route.view === 'releases') {
+        items = R.filter((r) => (type === 'All' || r.type === type) && matchA(r)).map(rCard);
+        rows = [row('Format', uniq(R.map((r) => r.type)))];
+      } else if (route.view === 'merch') {
+        items = M.filter((m) => (type === 'All' || m.category === type) && matchA(m)).map(mCard);
+        const fixed = (((this.state.data || {}).categories || {}).merch) || [];
+        rows = [row('Category', [...new Set([...fixed, ...uniq(M.map((m) => m.category))])])];
+      } else items = A.map(aCard);
+      col = { title: SECTION[route.view], count: loaded ? items.length + (items.length === 1 ? ' item' : ' items') : '', filterRows: rows, items, empty: loaded && items.length === 0 };
+    }
+
+    let d = null;
+    const sec = (title, items, allView, allLabel) => ({ title, items, all: () => this.go(allView), allLabel });
+    const buy = (x, opts) => {
+      const v = opts || [];
+      const i = Math.min(variant, v.length - 1);
+      const pid = x.shopifyProductId ? String(x.shopifyProductId).trim() : '';
+      this.currentShopId = pid;
+      return { hasBuy: v.length > 0 || !!pid, hasShopify: !!pid, noShopify: !pid, price: v[i] ? v[i].price : '', shopifyLabel: x.shopifyProductId ? 'SHOPIFY PRODUCT ' + x.shopifyProductId + ' · EMBED REPLACES THIS BLOCK' : 'SHOPIFY BUY BUTTON · EMBED REPLACES THIS BLOCK',
+        variants: v.map((vv, j) => chip(vv.name, j === i, () => this.setState({ variant: j, added: false }))) };
+    };
+    const toEmbed = (u) => {
+      u = String(u || '').trim();
+      const sp = u.match(/open\.spotify\.com\/(?:embed\/)?(album|track|artist|playlist)\/([A-Za-z0-9]+)/);
+      return sp ? 'https://open.spotify.com/embed/' + sp[1] + '/' + sp[2] + '?theme=0' : u;
+    };
+    const listen = (x) => ({ listen: toEmbed(x.listenEmbed), noListen: !x.listenEmbed });
+    if (loaded && route.view === 'artist') {
+      const a = A.find((x) => x.id === route.id);
+      if (a) {
+        const rs = R.filter((r) => r.artists.includes(a)), ms = M.filter((m) => m.artists.includes(a));
+        d = { section: 'Artists', back: () => this.go('artists'), title: a.name, isArtist: true, notArtist: false, kicker: a.country || '', ...img(a, 'ARTIST PHOTO 1:1'), credit: a.photoCredit || '',
+          bio: paras(a.bio), hasLinks: false, links: [], hasMeta: false, meta: [], hasBuy: false, hasListen: true, ...listen(a),
+          related: [rs.length && sec('Releases', rs.map(rCard), 'releases', 'All releases →'), ms.length && sec('Merch', ms.map(mCard), 'merch', 'All merch →')].filter(Boolean) };
+      }
+    } else if (loaded && route.view === 'release') {
+      const r = R.find((x) => x.id === route.id);
+      if (r) {
+        const ms = M.filter((m) => m.releases.includes(r));
+        const more = R.filter((x) => x !== r && x.artists.some((a) => r.artists.includes(a)));
+        d = { section: 'Releases', back: () => this.go('releases'), title: r.name, isArtist: false, notArtist: true, kicker: [r.type, r.year].filter(Boolean).join(' · '), ...img(r, 'RELEASE ARTWORK 1:1'), credit: '',
+          bio: paras(r.description), hasLinks: r.artists.length > 0, links: r.artists.map((a) => ({ pre: 'by', label: a.name, go: () => this.go('artist', a.id) })),
+          hasMeta: true, meta: [{ k: 'Format', v: (r.formats || []).map((v) => v.name).join(' / ') }, { k: 'Released', v: r.year || '' }, { k: 'Cat. no.', v: r.catalogueNumber || '' }].filter((m) => m.v),
+          ...buy(r, r.formats), hasListen: true, ...listen(r),
+          buyHeading: 'Buy · ' + (r.buyLabel || 'Digital'),
+          hasPhysical: ms.length > 0,
+          physical: ms.map((m) => ({ key: m.id, label: m.format || m.category || m.name, price: ((m.options || [])[0] || {}).price || '', go: () => this.go('item', m.id) })),
+          related: [ms.length && sec('Merch from ' + r.name, ms.map(mCard), 'merch', 'All merch →'), more.length && sec('More from ' + names(r.artists), more.map(rCard), 'releases', 'All releases →')].filter(Boolean) };
+      }
+    } else if (loaded && route.view === 'item') {
+      const m = M.find((x) => x.id === route.id);
+      if (m) {
+        const labelOnly = m.artists.length === 0;
+        const others = M.filter((x) => x !== m && (labelOnly ? x.artists.length === 0 : x.artists.some((a) => m.artists.includes(a))));
+        const links = [...m.releases.map((r) => ({ pre: 'From', label: r.name, go: () => this.go('release', r.id) })), ...m.artists.map((a) => ({ pre: 'by', label: a.name, go: () => this.go('artist', a.id) }))];
+        d = { section: 'Merch', back: () => this.go('merch'), title: m.name, isArtist: false, notArtist: true, kicker: m.category || '', ...img(m, 'MERCH SHOT 1:1'), credit: '',
+          bio: paras(m.description), hasLinks: links.length > 0, links,
+          kicker: [labelOnly ? 'INNI' : '', m.category].filter(Boolean).join(' · '),
+          hasMeta: false, meta: [], ...buy(m, m.options), hasListen: false, buyHeading: 'Buy', hasPhysical: false, physical: [], listen: '', noListen: false,
+          related: [others.length && sec('More from ' + names(m.artists), others.map(mCard), 'merch', 'All merch →')].filter(Boolean) };
+      }
+    }
+
+    return {
+      shopRef: this.shopRef,
+      nav, isCollection: collectionView, isDetail: !!d, col, d: d || {}, cardMin, loadError: this.state.loadError,
+      hasSearch: route.view === 'releases' || route.view === 'merch',
+      q: this.state.q, onSearch: (e) => this.setState({ q: e.target.value }),
+      goHome: () => this.go('releases'),
+      cartLabel: added ? 'Added ✓' : 'Add to cart',
+      addToCart: () => this.setState({ added: true }),
+    };
+  }
+}
+</script>
+</body>
+</html>
