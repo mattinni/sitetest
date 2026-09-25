@@ -1,0 +1,40 @@
+[
+  {
+    "tag": "Niall Breslin",
+    "name": "Niall Breslin",
+    "country": "Ireland",
+    "photo": "niall.jpg",
+    "photoCredit": "Photo: credit",
+    "bio": [
+      "Niall Breslin is an Irish multi-platinum musician, composer, and cinematic storyteller whose work moves between sound, spoken word, and visual art. His music draws on the deeper elements of Irish land, its history, its energy, sitting at the meeting point of composition and contemplation.",
+      "His debut album, The Place That Has Never Been Wounded was named Irish Times 'Irish' Album of the Year. The Irish Times called it work where his “instinctive, deeply empathetic playing burrows deeper in the head, resulting in a lingering serenity that politely but firmly shuts out the noise.” Adam Clayton of U2 described it as “a deeply affirming spiritual work that heals and captivates the audience, releasing something in you that you didn't even know you'd been carrying.”",
+      "His latest work, Meditations, is a spoken-word reimagining of the album, featuring Irish philosophers and poets, among them Michael Harding, Noirín Ní Riain, and Pádraig Ó Tuama."
+    ],
+    "listenEmbed": "https://open.spotify.com/album/1JwLGnsKxcWmCEJ6PDPvZU",
+    "published": true
+  },
+  {
+    "tag": "Example Artist A",
+    "name": "Example Artist A",
+    "country": "Iceland",
+    "photo": "",
+    "photoCredit": "",
+    "bio": [
+      "Artist bio goes here."
+    ],
+    "listenEmbed": "",
+    "published": false
+  },
+  {
+    "tag": "Example Artist B",
+    "name": "Example Artist B",
+    "country": "USA",
+    "photo": "",
+    "photoCredit": "",
+    "bio": [
+      "Artist bio goes here."
+    ],
+    "listenEmbed": "",
+    "published": false
+  }
+]

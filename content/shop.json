@@ -1,0 +1,6 @@
+{
+  "domain": "amrz03-wt.myshopify.com",
+  "storefrontAccessToken": "c98fdc4a6a8443fc5674523d198fac4b",
+  "moneyFormat": "€{{amount_with_comma_separator}}",
+  "buttonText": "Add to cart"
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "tag": "The Place That Has Never Been Wounded",
+    "title": "The Place That Has Never Been Wounded",
+    "tags": [
+      "Niall Breslin"
+    ],
+    "type": "Album",
+    "year": "2026",
+    "catalogueNumber": "INNIDLP25",
+    "artwork": "tpthnbw.jpg",
+    "description": [],
+    "formats": [
+      {
+        "name": "Digital",
+        "price": "€10.00"
+      },
+      {
+        "name": "12\" Vinyl LP",
+        "price": "€28.00"
+      },
+      {
+        "name": "CD",
+        "price": "€15.00"
+      }
+    ],
+    "shopifyProductId": "15563820400966",
+    "listenEmbed": "https://open.spotify.com/album/60x1D5VGy313Z4YA1Lx6ft",
+    "published": true,
+    "buyLabel": "Digital Album"
+  },
+  {
+    "tag": "Example EP",
+    "title": "Example EP",
+    "tags": [
+      "Example Artist A"
+    ],
+    "type": "EP",
+    "year": "2026",
+    "catalogueNumber": "INNI 044",
+    "artwork": "",
+    "description": [],
+    "formats": [
+      {
+        "name": "Digital",
+        "price": "€6.00"
+      }
+    ],
+    "shopifyProductId": "",
+    "listenEmbed": "",
+    "published": false
+  },
+  {
+    "tag": "Example Single",
+    "title": "Example Single",
+    "tags": [
+      "Example Artist B"
+    ],
+    "type": "Single",
+    "year": "2025",
+    "catalogueNumber": "INNI 043",
+    "artwork": "",
+    "description": [],
+    "formats": [
+      {
+        "name": "Digital",
+        "price": "€1.50"
+      }
+    ],
+    "shopifyProductId": "",
+    "listenEmbed": "",
+    "published": false
+  }
+]

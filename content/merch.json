@@ -1,0 +1,118 @@
+[
+  {
+    "title": "The Place That Has Never Been Wounded 12\" Vinyl LP",
+    "tags": [
+      "The Place That Has Never Been Wounded"
+    ],
+    "category": "Vinyl",
+    "image": "niallvinyl1.jpg",
+    "description": [
+      "12\" LP in printed sleeve. Product description goes here."
+    ],
+    "options": [
+      {
+        "name": "Black vinyl",
+        "price": "€28.00"
+      }
+    ],
+    "shopifyProductId": "",
+    "published": true,
+    "format": "12\" Vinyl LP"
+  },
+  {
+    "title": "The Place That Has Never Been Wounded CD",
+    "format": "CD",
+    "tags": [
+      "The Place That Has Never Been Wounded"
+    ],
+    "category": "CD",
+    "image": "niallcd.jpg",
+    "description": [
+      "CD in printed gatefold wallet with insert. Product description goes here."
+    ],
+    "options": [
+      {
+        "name": "CD",
+        "price": "€15.00"
+      }
+    ],
+    "shopifyProductId": "",
+    "published": true
+  },
+  {
+    "title": "The Place That Has Never Been Wounded T-Shirt",
+    "tags": [
+      "The Place That Has Never Been Wounded"
+    ],
+    "category": "Apparel",
+    "image": "",
+    "description": [
+      "Product description goes here."
+    ],
+    "options": [
+      {
+        "name": "S",
+        "price": "€25.00"
+      },
+      {
+        "name": "M",
+        "price": "€25.00"
+      },
+      {
+        "name": "L",
+        "price": "€25.00"
+      }
+    ],
+    "shopifyProductId": "",
+    "published": false
+  },
+  {
+    "title": "Example EP CD",
+    "tags": [
+      "Example EP"
+    ],
+    "category": "CD",
+    "image": "",
+    "description": [
+      "Product description goes here."
+    ],
+    "options": [
+      {
+        "name": "CD",
+        "price": "€12.00"
+      }
+    ],
+    "shopifyProductId": "",
+    "published": false
+  },
+  {
+    "title": "Matthew's T-Shirt",
+    "format": "T-Shirt",
+    "tags": [],
+    "category": "Apparel",
+    "image": "matthewstshirt.jpg",
+    "description": [
+      "Matthew's iconic black t-shirt"
+    ],
+    "options": [
+      {
+        "name": "S",
+        "price": "€25.00"
+      },
+      {
+        "name": "M",
+        "price": "€25.00"
+      },
+      {
+        "name": "L",
+        "price": "€25.00"
+      },
+      {
+        "name": "XL",
+        "price": "€25.00"
+      }
+    ],
+    "shopifyProductId": "",
+    "published": true
+  }
+]
